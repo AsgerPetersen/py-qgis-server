@@ -116,6 +116,12 @@ def configure_handlers( client: client.AsyncClient ) -> [tornado.web.RequestHand
 
     add_handler( rf"{root}(?P<endpoint>/wfs3/conformance{end})", OwsHandler, ows_kwargs )
     add_handler( rf"{root}(?P<endpoint>/wfs3/api{end})", OwsHandler, ows_kwargs )
+   
+   # Landing page
+    if cfg.getboolean("landing_page"):
+        prefix = cfg.get("landing_page_prefix").strip("/")
+        # Use OwsHandler (acts more like a generic QgisHandler here)
+        add_handler(rf"/{prefix}/.*", OwsHandler, ows_kwargs)
 
     return handlers
 
